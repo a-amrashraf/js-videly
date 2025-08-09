@@ -2,6 +2,8 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 
+const auth = require("../middleware/auth");
+
 const router = express.Router();
 
 const { Genre, ValidateGenre } = require("../model/Genre");
@@ -29,7 +31,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",auth, async (req, res) => {
   const { error } = ValidateGenre(req.body);
 
   if (error) {

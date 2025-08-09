@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid Email or password");
 
 
-  const token = jwt.sign({ _id: user._id },"jwtPrivateKey");
+  const token = User.generateAuthToken();
   res.send(token);
 });
 
@@ -28,6 +28,6 @@ function validate(req) {
     email: Joi.string().email().required().email(),
     password: Joi.string().min(8).required(),
   });
-  return Schema.validate(user);
+  return Schema.validate(req);
 }
 module.exports = router;

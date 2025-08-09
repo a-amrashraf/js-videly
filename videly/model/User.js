@@ -2,7 +2,7 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const mongoose = require("mongoose");
 
-const userSchmea = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -19,6 +19,10 @@ const userSchmea = new mongoose.Schema({
     minlength: 8,
   },
 });
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({ _id: this._id }, "jwtPrivateKey");
+  return token;
+};
 
 function validateUser(user) {
   const Schema = Joi.object({
@@ -29,7 +33,7 @@ function validateUser(user) {
   return Schema.validate(user);
 }
 
-const User = mongoose.model("User", userSchmea);
+const User = mongoose.model("User", userSchema);
 
 exports.User = User;
 exports.validateUser = validateUser;
